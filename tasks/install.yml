@@ -1,0 +1,21 @@
+---
+# Users rules
+- include: user.yml
+
+# Install Galaxy dependencies
+- include: prerequisites.yml
+
+# Configure uWSGI and job_conf
+#- include: uwsgi.yml
+#  become_user: '{{ galaxy_user }}'
+#  become: true
+
+# Galaxy customization
+- include: galaxy-custom.yml
+  become_user: '{{ galaxy_user }}'
+  become: true
+
+# Galaxy startup
+- include: galaxy-startup.yml
+  become_user: '{{ galaxy_user }}'
+  become: true

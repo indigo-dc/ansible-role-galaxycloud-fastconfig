@@ -1,0 +1,9 @@
+---
+# Prerequisites installation recipe
+
+#______________________________________
+# Create directories
+# WARNING!!! Setup directories after galaxy user creation
+
+- include: path.yml
+  when: enable_storage_advanced_options|bool == false
