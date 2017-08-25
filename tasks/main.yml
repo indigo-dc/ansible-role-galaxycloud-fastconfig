@@ -2,5 +2,6 @@
 - stat: path='{{ galaxy_custom_script_path }}/galaxy-startup'
   register: galaxy_installed
 
+# Run this recipe only if Galaxy is installed
 - include: install.yml
-  when: not galaxy_installed.stat.exists
+  when: galaxy_installed.stat.exists
