@@ -1,0 +1,10 @@
+---
+# CentOS 7
+
+- name: '[EL] Include vars'
+  include_vars: postgresql_redhat.yml
+
+- name: '[EL] Start PostgreSQL server'
+  shell: '/usr/pgsql-{{ postgresql_version }}/bin/pg_ctl -D {{ postgresql_pgdata }} -w start'
+  become: yes
+  become_user: postgres

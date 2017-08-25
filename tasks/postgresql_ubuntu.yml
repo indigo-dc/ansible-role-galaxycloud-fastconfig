@@ -1,0 +1,8 @@
+---
+# Ubuntu
+
+- name: '[Ubuntu] Include vars'
+  include_vars: postgresql_ubuntu.yml
+
+- name: '[Ubuntu] Start PostgreSQL server'
+  shell: '/etc/init.d/postgresql start'

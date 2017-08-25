@@ -41,16 +41,6 @@
 # Galaxy administrator: email. username, password and api_key
 # IMPORTANT: start Galaxy database postgresql to setup the galaxy administrator credentials
 
-- name: '[EL] Start PostgreSQL server'
-  shell: '/usr/pgsql-{{ postgresql_version }}/bin/pg_ctl -D {{ postgresql_pgdata }} -w start'
-  become: yes
-  become_user: postgres
-  when: ansible_os_family == "RedHat"
-
-- name: '[Ubuntu] Start PostgreSQL server'
-  shell: '/etc/init.d/postgresql start'
-  when: ansible_os_family == "Debian"
-
 - name: Setup Galaxy administrator
   command: "{{ galaxy_venv_path }}/bin/python {{ galaxy_custom_script_path }}/create_galaxy_user.py --user {{ GALAXY_ADMIN_EMAIL }} --password {{ GALAXY_ADMIN_PASSWORD }} --username {{ GALAXY_ADMIN_USERNAME }} -c {{ galaxy_config_file }} --key {{ GALAXY_ADMIN_API_KEY }}"
   args:
