@@ -1,0 +1,34 @@
+---
+# Proftpd installation and configuration recipe
+
+#______________________________________
+# Cconfigure Proftpd
+
+- name: '[Ubuntu] Set proftpd configuration file path on Ubuntu'
+  set_fact:
+    proftpd_conf_path: '/etc/proftpd/proftpd.conf'
+  when: ansible_os_family == "Debian"
+
+- name: Edit proftpd.conf
+  lineinfile:
+    name: '{{ proftpd_conf_path }}'
+    regexp: 'DefaultAddress'
+    line: 'DefaultAddress                  {{ ansible_default_ipv4.address }}'
+  become_user: root
+  become_method: sudo
+
+- name: '[VM] Set ip address'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: 'app:main'
+    option: 'ftp_upload_site'
+    value: '{{ ansible_default_ipv4.address }}'
+  when: ansible_virtualization_type != "docker"
+
+- name: '[Docker] Set ip address'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: 'app:main'
+    option: ftp_upload_site
+    value: "indigo-dc.galaxycloud docker by elixir-italy.org"
+  when: ansible_virtualization_type == "docker"
