@@ -11,9 +11,9 @@
   become: true
 
 # Configure uWSGI and job_conf
-#- include: uwsgi.yml
-#  become_user: '{{ galaxy_user }}'
-#  become: true
+- include: uwsgi.yml
+  become_user: '{{ galaxy_user }}'
+  become: true
 
 # Configure Proftpd
 - include: proftpd.yml
