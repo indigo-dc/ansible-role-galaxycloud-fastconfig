@@ -1,21 +1,26 @@
 indigo-dc.galaxycloud-fastconfig
 ================================
-Ansible role for Galaxy fast configuration on Virtual Manchines with Galaxy already installed with indigo.dc-galaxycloud role.
+Ansible role for Galaxy fast configuration on Virtual Manchines with Galaxy already installed using indigo.dc-galaxycloud role.
 
-Requirements
-------------
+Current indigo-dc.galaxycloud (and then Galaxy)  configuration is the following:
+```yaml
+     - hosts: servers
+       roles:
+         - role: indigo-dc.galaxycloud
+           GALAXY_ADMIN_EMAIL: "admin@elixir-italy.org"
+           GALAXY_ADMIN_USERNAME: "admin"
+           GALAXY_VERSION: "release_17.05"
+           galaxy_instance_key_pub: "ssh-rsa ..."
+           set_pgsql_random_password: false # postgres password is fixed: galaxy
+           set_proftpd_random_password: false # proftpd database password is fixed: galaxy
+           galaxy_db_dir: '/home/galaxy/galaxy/database'
+           tool_deps_path: '/home/galaxy/tool_deps'
+           conda_prefix: '/home/galaxy/tool_deps/_conda'
+           job_work_dir: 'database/jobs_directory'
+```
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Final Galaxy configuration, i.e. galaxycloud + galaxycloud-fastconfig is the same of galaxycloud standalone.
 
-Role Variables
---------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
@@ -24,14 +29,13 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: indigo-dc.galaxycloud-fastconfig
+           GALAXY_ADMIN_EMAIL: "mymail@example.com"
+           GALAXY_ADMIN_USERNAME: "myuser"
+           galaxy_instance_description: "mygalaxy"
+          galaxy_instance_key_pub: "ssh-rsa ..."
 
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Apache Licence 2
