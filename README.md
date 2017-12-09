@@ -27,13 +27,15 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
+```yaml
     - hosts: servers
       roles:
          - role: indigo-dc.galaxycloud-fastconfig
            GALAXY_ADMIN_EMAIL: "mymail@example.com"
            GALAXY_ADMIN_USERNAME: "myuser"
            galaxy_instance_description: "mygalaxy"
-          galaxy_instance_key_pub: "ssh-rsa ..."
+           galaxy_instance_key_pub: "ssh-rsa ..."
+```
 
 License
 -------
