@@ -37,7 +37,7 @@
   service:
     name: nginx
     enabled: yes
-    state: sterted
+    state: started
   become_user: root
   become_method: sudo
   when: supervisor_manage_nginx == "False"
