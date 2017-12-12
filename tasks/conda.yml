@@ -47,15 +47,18 @@
   when: ansible_os_family == "Debian"
 
 # move conda packages to tool_deps/_conda/
+- name: Check if tool_deps dir exists
+  stat:
+    path: '/home/galaxy/tool_deps'
+  register: register_tool_deps_dir
+
 - name: Move conda packages
   shell: 'rsync -av /home/galaxy/tool_deps/ {{tool_deps_path}} > /tmp/_conda_rsync.log'
-  args:
-    creates: '{{tool_deps_path}}/_conda/bin/conda'
+  when: register_tool_deps_dir.stat.exists
 
 # remove conda packages
 - name: Remove old tool_deps
   file:
     dest: '/home/galaxy/tool_deps'
     state: absent
-  become_user: root
-  become_method: sudo
+  when: register_tool_deps_dir.stat.exists
