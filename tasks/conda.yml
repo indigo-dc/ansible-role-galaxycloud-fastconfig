@@ -62,3 +62,7 @@
     dest: '/home/galaxy/tool_deps'
     state: absent
   when: register_tool_deps_dir.stat.exists
+
+- name: Fix old symlink
+  command: 'ln -s {{tool_deps_path}} /home/galaxy/tool_deps'
+
