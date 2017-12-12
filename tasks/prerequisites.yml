@@ -12,6 +12,16 @@
 #     - { section: 'INDIGO-1-updates', option: 'enabled', value: '0' }
 #     - { section: 'INDIGO-1-third-party', option: 'enabled', value: '0' }
 #  when: ansible_os_family == "RedHat"
+
+#______________________________________
+# Disable Selinux to have services working
+- name: Disable Selinux
+  selinux:
+    policy: targeted
+    state: permissive
+  become_user: root
+  become_method: sudo
+  when: ansible_os_family == "RedHat"
  
 #______________________________________
 # Create directories
