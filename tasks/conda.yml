@@ -48,7 +48,7 @@
 
 # move conda packages to tool_deps/_conda/
 - name: Move conda packages
-  shell: 'rsync -av /home/galaxy/tool_deps {{tool_deps_path}} > /tmp/_conda_rsync.log'
+  shell: 'rsync -av /home/galaxy/tool_deps/ {{tool_deps_path}} > /tmp/_conda_rsync.log'
 
 # remove conda packages
 - name: Remove old tool_deps
