@@ -15,6 +15,15 @@
     - rsync
   when: ansible_os_family == "Debian"
 
+- name: Create destination directory
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: '{{ galaxy_user }}'
+    group: '{{ galaxy_user }}'
+  with_items:
+    - '{{ galaxy_db_dir }}'
+
 - name: 'Move Galaxy database dir to external volume'
   shell: 'rsync -av {{galaxy_install_path}}/database/ {{galaxy_db_dir}} > /tmp/galaxy_database_rsync.log'
 
