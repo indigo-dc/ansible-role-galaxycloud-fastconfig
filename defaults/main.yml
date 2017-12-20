@@ -69,8 +69,7 @@ tool_deps_path: "{{ export_dir }}/tool_deps"
 
 # Enable Conda
 use_conda: true
-job_work_dir: "{{ export_dir }}/job_work_dir" # From galaxy.ini: IMPORTANT: Due to a current limitation in conda, the total length of the conda_prefix and the job_working_directory path should be less than 50 characters!
-conda_prefix: "{{ export_dir }}/_conda"
+conda_prefix: "{{ tool_deps_path }}/_conda"
 conda_channels: "iuc,bioconda,r,defaults,conda-forge"
 
 # Update UCSC genome database
@@ -128,3 +127,9 @@ supervisor_manage_proftpd: "False"
 # Facts needs to be gathered!
 
 enable_storage_advanced_options: false
+
+#______________________________________
+# Inform the role if galaxy tools and reference data will be installed
+# If yes, galaxy is not started
+galaxy_flavor: 'galaxy-no-tools'
+get_refdata: false

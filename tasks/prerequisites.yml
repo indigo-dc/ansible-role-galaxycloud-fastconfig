@@ -1,16 +1,26 @@
 ---
 # Prerequisites installation recipe
 
-- name: "[EL] Disable Indig repo to ensure development library consistency"
-  ini_file:
-    dest: '/etc/yum.repos.d/indigo1.repo'
-    section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
-  with_items:
-     - { section: 'INDIGO-1-base', option: 'enabled', value: '0' }
-     - { section: 'INDIGO-1-updates', option: 'enabled', value: '0' }
-     - { section: 'INDIGO-1-third-party', option: 'enabled', value: '0' }
+#- name: "[EL] Disable Indigo repo to ensure development library consistency"
+#  ini_file:
+#    dest: '/etc/yum.repos.d/indigo1.repo'
+#    section: '{{ item.section }}'
+#    option: '{{ item.option }}'
+#    value: '{{ item.value }}'
+#  with_items:
+#     - { section: 'INDIGO-1-base', option: 'enabled', value: '0' }
+#     - { section: 'INDIGO-1-updates', option: 'enabled', value: '0' }
+#     - { section: 'INDIGO-1-third-party', option: 'enabled', value: '0' }
+#  when: ansible_os_family == "RedHat"
+
+#______________________________________
+# Disable Selinux to have services working
+- name: Disable Selinux
+  selinux:
+    policy: targeted
+    state: permissive
+  become_user: root
+  become_method: sudo
   when: ansible_os_family == "RedHat"
  
 #______________________________________
