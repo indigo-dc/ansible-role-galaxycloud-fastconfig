@@ -70,3 +70,6 @@
   become_user: root
   become_method: sudo
   when: ansible_virtualization_type != "docker"
+
+- name: '[VM] Install workflow'
+  include: install_workflow.yml
