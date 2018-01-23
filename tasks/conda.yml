@@ -65,4 +65,3 @@
 
 - name: Fix old symlink
   command: 'ln -s {{tool_deps_path}} /home/galaxy/tool_deps'
-

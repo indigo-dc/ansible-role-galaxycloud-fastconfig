@@ -39,21 +39,23 @@
 - include: conda.yml
   when: use_conda
 
-# Move Galaxy files from /home/galaxy/galaxy/databaase to {{ galaxy_db_dir }}
-- include: move_galaxy_database_dir.yml
-  when: galaxy_db_dir != "{{ galaxy_install_path }}/database"
-
 #______________________________________
 # Galaxy administrator: email. username, password and api_key
 # IMPORTANT: start Galaxy database postgresql to setup the galaxy administrator credentials
 
 - name: Setup Galaxy administrator
-  command: "{{ galaxy_venv_path }}/bin/python {{ galaxy_custom_script_path }}/create_galaxy_user.py --user {{ GALAXY_ADMIN_EMAIL }} --password {{ GALAXY_ADMIN_PASSWORD }} --username {{ GALAXY_ADMIN_USERNAME }} -c {{ galaxy_config_file }}"
+  command: "{{ galaxy_venv_path }}/bin/python {{ galaxy_custom_script_path }}/create_galaxy_user.py --user {{ GALAXY_ADMIN_EMAIL }} --password {{ GALAXY_ADMIN_PASSWORD }} --username {{ GALAXY_ADMIN_USERNAME }} -c {{ galaxy_config_file }} --key {{ GALAXY_ADMIN_API_KEY }}"
   args:
     chdir: '{{ galaxy_install_path }}/'
   environment:
     PYTHONPATH: "{{ galaxy_install_path }}/lib"
     VIRTUAL_ENV: "{{ galaxy_venv_path }}"
+
+#______________________________________
+# Install workflow and libraries
+
+- include: import_galaxy_assets.yml
+  when: galaxy_flavor != 'galaxy-no-tools'
 
 #______________________________________
 # id_secret configuration

@@ -133,3 +133,11 @@ enable_storage_advanced_options: false
 # If yes, galaxy is not started
 galaxy_flavor: 'galaxy-no-tools'
 get_refdata: false
+
+#______________________________________
+# Galaxy flavor recipe directory.
+# If this dir is not on the VM, the role will download the recipes.
+galaxy_tools_base_dir: '/data'
+# Set Ephemeris version and path
+tools_venv_dir: '/tmp/tools_venv'
+ephemeris_version: '0.7.0'

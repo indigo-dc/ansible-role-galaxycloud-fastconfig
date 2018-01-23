@@ -1,4 +1,5 @@
 ---
+# Install rsync
 - name: '[EL] Install rsync'
   yum:
     name: '{{ item }}'
@@ -15,6 +16,7 @@
     - rsync
   when: ansible_os_family == "Debian"
 
+# move datasets to a destination directory
 - name: Create destination directory
   file:
     path: '{{ item }}'
