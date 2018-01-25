@@ -1,4 +1,8 @@
 ---
+
+# update galaxyctl if needed
+- include: install_galaxyctl.yml
+
 #______________________________________
 # Stop services
 
