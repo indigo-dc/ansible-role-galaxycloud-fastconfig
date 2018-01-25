@@ -15,3 +15,8 @@
     line: '            upload_store {{galaxy_db_dir}}/tmp/nginx_upload_store;'
   become_user: root
   become_method: sudo
+
+- name: Create NGINX upload_store dir
+  file:
+    path: '{{ nginx_upload_store_path }}'
+    state: directory
