@@ -20,7 +20,7 @@
 - name: Update galaxyctl
   pip:
     name: .
-    chdir: {{ galaxyctl_path }}''
+    chdir: '{{ galaxyctl_path }}'
     executable: '{{ pip_exe }}'
     extra_args: --ignore-installed
   become_user: root
