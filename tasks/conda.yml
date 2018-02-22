@@ -53,7 +53,7 @@
   register: register_tool_deps_dir
 
 - name: Move conda packages
-  shell: 'rsync -av /home/galaxy/tool_deps/ {{tool_deps_path}} > /tmp/_conda_rsync.log'
+  shell: 'rsync -a /home/galaxy/tool_deps/ {{tool_deps_path}}'
   when: register_tool_deps_dir.stat.exists
 
 # remove conda packages
