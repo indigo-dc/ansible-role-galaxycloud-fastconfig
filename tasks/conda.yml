@@ -52,19 +52,15 @@
     path: '/home/galaxy/tool_deps'
   register: register_tool_deps_dir
 
-#- name: Move conda packages
-#  shell: 'rsync -av /home/galaxy/tool_deps/ {{tool_deps_path}} > /tmp/_conda_rsync.log'
-#  when: register_tool_deps_dir.stat.exists
-
-## remove conda packages
-#- name: Remove old tool_deps
-#  file:
-#    dest: '/home/galaxy/tool_deps'
-#    state: absent
-#  when: register_tool_deps_dir.stat.exists
-
 - name: Move conda packages
-  command: 'mv /home/galaxy/tool_deps {{tool_deps_path}}'
+  shell: 'rsync -a /home/galaxy/tool_deps/ {{tool_deps_path}}'
+  when: register_tool_deps_dir.stat.exists
+
+# remove conda packages
+- name: Remove old tool_deps
+  file:
+    dest: '/home/galaxy/tool_deps'
+    state: absent
   when: register_tool_deps_dir.stat.exists
 
 - name: Fix old symlink
