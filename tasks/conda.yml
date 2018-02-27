@@ -25,27 +25,6 @@
     value: '{{ conda_prefix }}'
 
 #______________________________________
-# Install rsync
-- name: '[EL] Install rsync'
-  yum:
-    name: '{{ item }}'
-    state: present
-  with_items:
-    - rsync
-  become_user: root
-  become_method: sudo
-  when: ansible_os_family == "RedHat"
-
-- name: '[Ubuntu] Install rsync'
-  apt:
-    name: '{{ item }}'
-    state: present
-  with_items:
-    - rsync
-  become_user: root
-  become_method: sudo
-  when: ansible_os_family == "Debian"
-
 # move conda packages to tool_deps/_conda/
 - name: Check if tool_deps dir exists
   stat:
@@ -53,7 +32,7 @@
   register: register_tool_deps_dir
 
 - name: Move conda packages
-  shell: 'rsync -a /home/galaxy/tool_deps/ {{tool_deps_path}}'
+  shell: 'cp -a /home/galaxy/tool_deps {{tool_deps_path}}'
   when: register_tool_deps_dir.stat.exists
 
 # remove conda packages

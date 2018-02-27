@@ -1,21 +1,4 @@
 ---
-# Install rsync
-- name: '[EL] Install rsync'
-  yum:
-    name: '{{ item }}'
-    state: present
-  with_items:
-    - rsync
-  when: ansible_os_family == "RedHat"
-
-- name: '[Ubuntu] Install rsync'
-  apt:
-    name: '{{ item }}'
-    state: present
-  with_items:
-    - rsync
-  when: ansible_os_family == "Debian"
-
 # move datasets to a destination directory
 - name: Create destination directory
   file:
@@ -32,7 +15,7 @@
   register: register_galaxy_db_dir
 
 - name: 'Move Galaxy database dir to external volume'
-  shell: 'rsync -av {{galaxy_install_path}}/database/ {{galaxy_db_dir}} > /tmp/galaxy_database_rsync.log'
+  shell: 'cp -a {{galaxy_install_path}}/database {{galaxy_db_dir}}'
   when: register_galaxy_db_dir.stat.exists
 
 - name: Remove unuseful datasets
