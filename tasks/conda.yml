@@ -31,22 +31,37 @@
     path: '/home/galaxy/tool_deps'
   register: register_tool_deps_dir
 
+- name: Check if tool_deps dir is a symlink
+  command: 'test -L /home/galaxy/tool_deps'
+  register: is_symlink
+  when: register_tool_deps_dir.stat.exists
+  failed_when: (is_symlink.rc != 0) and (is_symlink.rc != 1)
+
 - name: Clean tool_deps directory
   file:
     dest: '{{tool_deps_path}}'
     state: absent
-  when: register_tool_deps_dir.stat.exists
+  when:
+    - register_tool_deps_dir.stat.exists
+    - is_symlink.rc != 0
 
 - name: Move conda packages
   shell: 'cp -a /home/galaxy/tool_deps {{tool_deps_path}}'
-  when: register_tool_deps_dir.stat.exists
+  when:
+    - register_tool_deps_dir.stat.exists
+    - is_symlink.rc != 0
 
 # remove conda packages
 - name: Remove old tool_deps
   file:
     dest: '/home/galaxy/tool_deps'
     state: absent
-  when: register_tool_deps_dir.stat.exists
+  when:
+    - register_tool_deps_dir.stat.exists
+    - is_symlink.rc != 0
 
 - name: Fix old symlink
   command: 'ln -s {{tool_deps_path}} /home/galaxy/tool_deps'
+  when:
+    - register_tool_deps_dir.stat.exists
+    - is_symlink.rc != 0
