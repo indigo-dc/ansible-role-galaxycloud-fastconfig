@@ -4,6 +4,22 @@
 - include: install_galaxyctl.yml
 
 #______________________________________
+# update galaxy-startup script
+- name: Download galaxy-startup script from indigo-dc.galaxycloud
+  get_url:
+    url: https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud/master/templates/galaxy_startup.j2
+    dest: /tmp/galaxy_startup.j2
+
+- name: Update galaxy-startup script
+  template:
+    src: '/tmp/galaxy_startup.j2'
+    dest: '{{ galaxy_custom_script_path }}/galaxy-startup'
+    mode: 'a+x'
+    force: yes
+  become_user: root
+  become_method: sudo
+
+#______________________________________
 # Stop services
 
 - name: '[EL] Stop PostgreSQL server'
