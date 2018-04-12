@@ -68,7 +68,6 @@ export_dir: "/export"
 tool_deps_path: "{{ export_dir }}/tool_deps"
 
 # Enable Conda
-use_conda: true
 conda_prefix: "{{ tool_deps_path }}/_conda"
 conda_channels: "iuc,bioconda,r,defaults,conda-forge"
 
