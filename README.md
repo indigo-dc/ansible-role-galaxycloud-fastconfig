@@ -16,7 +16,6 @@ Current indigo-dc.galaxycloud (and then Galaxy)  configuration is the following:
            galaxy_db_dir: '/home/galaxy/galaxy/database'
            tool_deps_path: '/home/galaxy/tool_deps'
            conda_prefix: '/home/galaxy/tool_deps/_conda'
-           job_work_dir: 'database/jobs_directory'
 ```
 
 Final Galaxy configuration, i.e. galaxycloud + galaxycloud-fastconfig is the same of galaxycloud standalone.

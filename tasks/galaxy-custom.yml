@@ -50,7 +50,6 @@
 # Conda configuration.
 # Conda packages are moved to the external volume.
 - include: conda.yml
-  when: use_conda
 
 #______________________________________
 # Galaxy administrator: email. username, password and api_key
