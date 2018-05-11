@@ -22,6 +22,8 @@
     name: '{{ proftpd_conf_path }}'
     regexp: '/home/galaxy/galaxy/database/ftp/'
     replace: '{{ export_dir }}/galaxy/database/ftp/'
+  become_user: root
+  become_method: sudo
 
 - name: '[VM] Set ip address'
   ini_file:
