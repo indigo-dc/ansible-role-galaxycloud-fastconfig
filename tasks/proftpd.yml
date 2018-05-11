@@ -9,13 +9,19 @@
     proftpd_conf_path: '/etc/proftpd/proftpd.conf'
   when: ansible_os_family == "Debian"
 
-- name: Edit proftpd.conf
+- name: 'Edit proftpd.conf: change default address'
   lineinfile:
     name: '{{ proftpd_conf_path }}'
     regexp: 'DefaultAddress'
     line: 'DefaultAddress                  {{ ansible_default_ipv4.address }}'
   become_user: root
   become_method: sudo
+
+- name: 'Edit proftpd.con: change user path'
+  replace:
+    name: '{{ proftpd_conf_path }}'
+    regexp: '/home/galaxy/galaxy/database/ftp/'
+    replace: '{{ export_dir }}/galaxy/database/ftp/'
 
 - name: '[VM] Set ip address'
   ini_file:
