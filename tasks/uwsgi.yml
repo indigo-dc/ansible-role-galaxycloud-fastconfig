@@ -1,91 +1,23 @@
 ---
-# uWSGI installation and configuration recipe
-
 - name: Include uWSGI specific variables.
   include_vars: uwsgi_vars.yml
 
-- name: uWSGI section config
-  ini_file:
-    dest: '{{ galaxy_config_file }}'
-    section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
-  with_items:
-    - { section: 'uwsgi', option: 'master', value: 'True' }
-    - { section: 'uwsgi', option: 'processes', value: '{{ uwsgi_processes }}' }
-    - { section: 'uwsgi', option: 'socket', value: '{{ uwsgi_socket_port }}' }
-    - { section: 'uwsgi', option: 'stats', value: '{{ uwsgi_stats_port }}' }
-    - { section: 'uwsgi', option: 'pythonpath', value: '{{ galaxy_install_path }}/lib' }
-    - { section: 'uwsgi', option: 'pythonhome', value: '{{ galaxy_venv_path }}' }
-    - { section: 'uwsgi', option: 'threads', value: '{{ uwsgi_threads }}' }
-    - { section: 'uwsgi', option: 'logto', value: '{{ uwsgi_errorlog }}' }
-    - { section: 'uwsgi', option: 'no-orphans', value: 'True' }
+#______________________________________
+# Add uWSGI section to galaxy.ini file
+# Galaxy < release_18.01
 
-- name: if proc<=2
-  ini_file:
-    dest: '{{ galaxy_config_file }}'
-    section: 'uwsgi'
-    option: 'processes'
-    value: '{{ ansible_processor_vcpus }}'
-  when: ansible_processor_vcpus <= 2
-
-- name: if proc>8
-  ini_file:
-    dest: '{{ galaxy_config_file }}'
-    section: 'uwsgi'
-    option: 'processes'
-    value: '8'
-  when: ansible_processor_vcpus > 8
+- include: uwsgi_ini.yml
+  when: galaxy_config_file_extension == 'ini'
 
 #______________________________________
-# Edit galaxy.ini file
+# Edit uWSGI section in galaxy.tyml file
+# Galaxy >= release_18.05
 
-- name: Edit galaxy.ini
-  ini_file:
-    dest: '{{ galaxy_config_file }}'
-    section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: ' {{item.value }}'
-  with_items:
-    - { section: 'app:main', option: 'static_enabled', value: 'False' }
-    - { section: 'app:main', option: 'track_jobs_in_database', value: 'True' } # The track_jobs_in_database option in galaxy.ini can still be set but should be unnecessary. If there are more than one [server:...] sections in the file, database job tracking will be enabled automatically.
+- include: uwsgi_yaml.yml
+  when: galaxy_config_file_extension == 'yml'
 
 #______________________________________
-# job_conf section
-# Local runner configuration
-# https://wiki.galaxyproject.org/Admin/Config/Performance/Cluster
+### job_conf section
+# Edit job_conf.xml file
 
-- name: if proc==4
-  set_fact:
-    galaxy_workers: "4"
-    galaxy_local_slos: "2"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "4"
-
-- name: if proc==8
-  set_fact: 
-    galaxy_workers: "8"
-    galaxy_local_slos: "2"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "8"
-
-- name: if proc==16
-  set_fact: 
-    galaxy_workers: "16"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "16"
-
-- name: if proc==32
-  set_fact: 
-    galaxy_workers: "32"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "4"
-  when: ansible_processor_vcpus == "32"
-
-- name: if proc==64
-  set_fact: 
-    galaxy_workers: "64"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "4"
-  when: ansible_processor_vcpus == "64"
+- include: job_conf.yml
