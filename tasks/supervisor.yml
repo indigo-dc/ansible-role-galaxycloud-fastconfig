@@ -27,3 +27,12 @@
     - { section: 'unix_http_server', option: 'chown', value: 'root:{{ galaxy_user }}' }
   become_user: root
   become_method: sudo
+
+- name: Edit supervisor.sock directory permissions
+  file:
+    path: /var/run/supervisor
+    state: directory
+    mode: 0755
+  become_user: root
+  become_method: sudo
+  when: ansible_os_family == "RedHat"
