@@ -1,0 +1,37 @@
+---
+# Supervisord installation and configuration recipe
+# Ensure supervisord is correctly configured, allowing {{ galaxy_user }}
+# to run it without privileges
+
+- name: '[EL] Set supervisord conf path'
+  set_fact:
+    supervisord_conf_path: '/etc'
+  when: ansible_os_family == "RedHat"
+
+- name: '[Ubuntu] Set supervisord conf path'
+  set_fact:
+    supervisord_conf_path: '/etc/supervisor'
+  when: ansible_os_family == "Debian"
+
+#______________________________________
+# Change supervisord.sock ownership
+- name: 'Grant {{ galaxy_user }} supervisor access'
+  ini_file:
+    dest: '{{ supervisord_conf_path }}/supervisord.conf'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: 'unix_http_server', option: 'chmod', value: '0770' }
+    - { section: 'unix_http_server', option: 'chown', value: 'root:{{ galaxy_user }}' }
+  become_user: root
+  become_method: sudo
+
+- name: Edit supervisor.sock directory permissions
+  file:
+    path: /var/run/supervisor
+    state: directory
+    mode: 0755
+  become_user: root
+  become_method: sudo
+  when: ansible_os_family == "RedHat"
