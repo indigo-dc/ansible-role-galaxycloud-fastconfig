@@ -1,10 +1,7 @@
 ---
 # uWSGI installation and configuration recipe
 
-- name: Include uWSGI specific variables.
-  include_vars: uwsgi_vars.yml
-
-- name: uWSGI section config
+- name: '[release_17.**] uWSGI section config'
   ini_file:
     dest: '{{ galaxy_config_file }}'
     section: '{{ item.section }}'
@@ -21,7 +18,7 @@
     - { section: 'uwsgi', option: 'logto', value: '{{ uwsgi_errorlog }}' }
     - { section: 'uwsgi', option: 'no-orphans', value: 'True' }
 
-- name: if proc<=2
+- name: '[release_17.**] if proc<=2'
   ini_file:
     dest: '{{ galaxy_config_file }}'
     section: 'uwsgi'
@@ -29,7 +26,7 @@
     value: '{{ ansible_processor_vcpus }}'
   when: ansible_processor_vcpus <= 2
 
-- name: if proc>8
+- name: '[release_17.**] if proc>8'
   ini_file:
     dest: '{{ galaxy_config_file }}'
     section: 'uwsgi'
@@ -40,7 +37,7 @@
 #______________________________________
 # Edit galaxy.ini file
 
-- name: Edit galaxy.ini
+- name: '[release_17.**] Edit galaxy.ini'
   ini_file:
     dest: '{{ galaxy_config_file }}'
     section: '{{ item.section }}'
@@ -48,44 +45,4 @@
     value: ' {{item.value }}'
   with_items:
     - { section: 'app:main', option: 'static_enabled', value: 'False' }
-    - { section: 'app:main', option: 'track_jobs_in_database', value: 'True' } # The track_jobs_in_database option in galaxy.ini can still be set but should be unnecessary. If there are more than one [server:...] sections in the file, database job tracking will be enabled automatically.
-
-#______________________________________
-# job_conf section
-# Local runner configuration
-# https://wiki.galaxyproject.org/Admin/Config/Performance/Cluster
-
-- name: if proc==4
-  set_fact:
-    galaxy_workers: "4"
-    galaxy_local_slos: "2"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "4"
-
-- name: if proc==8
-  set_fact: 
-    galaxy_workers: "8"
-    galaxy_local_slos: "2"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "8"
-
-- name: if proc==16
-  set_fact: 
-    galaxy_workers: "16"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "2"
-  when: ansible_processor_vcpus == "16"
-
-- name: if proc==32
-  set_fact: 
-    galaxy_workers: "32"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "4"
-  when: ansible_processor_vcpus == "32"
-
-- name: if proc==64
-  set_fact: 
-    galaxy_workers: "64"
-    galaxy_local_slos: "4"
-    galaxy_registered_concurrent_jobs: "4"
-  when: ansible_processor_vcpus == "64"
+    - { section: 'app:main', option: 'track_jobs_in_database', value: 'True' }
