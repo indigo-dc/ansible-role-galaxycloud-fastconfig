@@ -21,7 +21,7 @@
     url: '{{ item.url }}'
     dest: '{{ item.dest }}'
   with_items:
-    - { url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud/master/vars/mail_vars.yml', dest: ' /tmp/mail_vars.yml' }
+    - { url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud/master/vars/mail_vars.yml', dest: '/tmp/mail_vars.yml' }
     - { url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud/master/templates/mail_success.html.j2', dest: '/tmp/mail_success.html.j2' }
 
 - include_vars: /tmp/mail_vars.yml
