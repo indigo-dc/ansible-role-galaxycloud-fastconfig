@@ -40,7 +40,7 @@
   when: ansible_processor_vcpus == "64"
 
 - name: Download job_conf template from indigo-dc.galaxycloud
-  get-url:
+  get_url:
     url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud/master/templates/job_conf.xml.j2'
     dest: '/tmp/job_conf.xml.j2'
 
