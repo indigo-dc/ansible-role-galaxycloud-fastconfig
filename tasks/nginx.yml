@@ -25,6 +25,7 @@
     dest: '/etc/nginx/nginx.conf'
     regexp: '            upload_store /home/galaxy/galaxy/database/tmp/nginx_upload_store;'
     line: '            upload_store {{galaxy_db_dir}}/tmp/nginx_upload_store;'
+    backrefs: yes
   become_user: root
   become_method: sudo
 
