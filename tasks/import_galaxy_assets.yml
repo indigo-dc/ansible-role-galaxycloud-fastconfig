@@ -8,7 +8,7 @@
   file:
     path: '{{ galaxy_tools_base_dir }}'
     state: directory
-  when: not tool_dir_path.exists
+  when: not tool_dir_path.stat.exists|bool
 
 - name: Get Galaxy flavor recipes
   git:
@@ -16,7 +16,7 @@
     clone: yes
     force: yes
     dest: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
-  when: not tool_dir_path.exists
+  when: not tool_dir_path.stat.exists|bool
 
 - name: Include sources list
   include: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
