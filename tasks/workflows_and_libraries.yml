@@ -32,6 +32,8 @@
     src: '/tmp/galaxy-startup-lite.17.sh.j2'
     dest: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
     mode: a+x
+  become_user: root
+  become_method: sudo
 
 - name: Start Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite start'
