@@ -22,6 +22,17 @@
     group: '{{galaxy_user}}'
     remote_src: true
 
+- name: Download galaxy-startup-lite template
+  get_url:
+    url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.17.sh.j2'
+    dest: '/tmp/galaxy-startup-lite.17.sh.j2'
+
+- name: Copy galaxy-startup-lite template
+  template:
+    src: '/tmp/galaxy-startup-lite.17.sh.j2'
+    dest: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
+    mode: a+x
+
 - name: Start Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite start'
 
