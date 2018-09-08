@@ -9,6 +9,8 @@
     path: '{{ galaxy_tools_base_dir }}'
     state: directory
   when: not tool_dir_path.stat.exists|bool
+  become_user: root
+  become_method: sudo
 
 - name: Get Galaxy flavor recipes
   git:
@@ -17,6 +19,8 @@
     force: yes
     dest: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
   when: not tool_dir_path.stat.exists|bool
+  become_user: root
+  become_method: sudo
 
 - name: Include sources list
   include: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
