@@ -8,6 +8,8 @@
   file:
     path: '{{ galaxy_tools_base_dir }}'
     state: directory
+    owner: '{{ galaxy_user }}'
+    group: '{{ galaxy_user }}'
   when: not tool_dir_path.stat.exists|bool
   become_user: root
   become_method: sudo
