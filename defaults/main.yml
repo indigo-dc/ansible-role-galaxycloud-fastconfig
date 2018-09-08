@@ -147,3 +147,6 @@ galaxy_tools_base_dir: '/data'
 # Set Ephemeris version and path
 tools_venv_dir: '/tmp/tools_venv'
 ephemeris_version: '0.7.0'
+# Install workflows and libraries
+install_workflows: false
+install_data_libraries: false
