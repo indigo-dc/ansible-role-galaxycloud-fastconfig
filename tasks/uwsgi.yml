@@ -4,7 +4,7 @@
 
 #______________________________________
 # Edit uWSGI section in galaxy.yml or galaxy.ini file
-- include: uwsgi_{{when: galaxy_config_style}}.yml
+- include: uwsgi_{{galaxy_config_style}}.yml
 
 #______________________________________
 ### job_conf section
