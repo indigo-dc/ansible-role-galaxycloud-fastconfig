@@ -61,3 +61,6 @@
 
 - debug:
     msg: 'Galaxy configuration style: "{{ galaxy_config_style }}"'
+
+- debug:
+    msg: 'Galaxy configuration section in {{ galaxy_config_file }}: {{ galaxy_config_section }}'
