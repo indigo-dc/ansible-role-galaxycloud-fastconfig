@@ -8,7 +8,9 @@
   file:
     path: '{{ galaxy_tools_base_dir }}'
     state: directory
-  when: not tool_dir_path.exists
+  when: not tool_dir_path.stat.exists|bool
+  become_user: root
+  become_method: sudo
 
 - name: Get Galaxy flavor recipes
   git:
@@ -16,7 +18,10 @@
     clone: yes
     force: yes
     dest: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
-  when: not tool_dir_path.exists
+p
+  when: not tool_dir_path.stat.exists|bool
+  become_user: root
+  become_method: sudo
 
 - name: Include sources list
   include: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
@@ -26,25 +31,21 @@
     path: '{{item}}'
     state: absent
   with_items:
-    - '{{galaxy_config_path}}/galaxy.ini.prod'
-    - '{{galaxy_config_path}}/galaxy.prod.ini'
-    - '{{galaxy_config_path}}/galaxy.ini.lite'
-    - '{{galaxy_config_path}}/galaxy.lite.ini'
-    - '{{galaxy_config_path}}/galaxy.yml.prod'
-    - '{{galaxy_config_path}}/galaxy.prod.yml'
-    - '{{galaxy_config_path}}/galaxy.yml.lite'
-    - '{{galaxy_config_path}}/galaxy.lite.yml'
+    - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.prod'
+    - '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
+    - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.lite'
+    - '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
 
 - name: '[VM][release_17.**] Install workflow and libraries'
   include: workflows_and_libraries_17.yml
   when:
-    - galaxy_config_file_extension == 'ini'
+    - galaxy_version_number|float < '18.01'
     - install_workflows|bool or install_data_libraries|bool
 
 - name: '[VM] Install workflow and libraries'
   include: workflows_and_libraries.yml
   when:
-    - galaxy_config_file_extension == 'yml'
+    - galaxy_version_number|float >= '18.01'
     - install_workflows|bool or install_data_libraries|bool
 
 # Move Galaxy files from /home/galaxy/galaxy/databaase to {{ galaxy_db_dir }}
