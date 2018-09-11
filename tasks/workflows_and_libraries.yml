@@ -23,7 +23,7 @@
     owner: '{{galaxy_user}}'
     group: '{{galaxy_user}}'
     remote_src: true
-
+    
 - name: Check galaxy-startup-lite exists
   stat:
     path: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
@@ -54,7 +54,7 @@
   become_method: sudo
   when: not stat_galaxy_startup_list_result.stat.exists|bool
 
-- name: 'Start Galaxy lite'
+- name: Start Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite start'
 
 - name: '[release_17.**] Set ephemeris to the right version'
