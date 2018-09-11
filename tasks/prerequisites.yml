@@ -38,6 +38,13 @@
     galaxy_version_number: "{{ GALAXY_VERSION | replace('release_','') }}"
   when: (GALAXY_VERSION != 'master') or (GALAXY_VERSION != 'dev')
 
+- debug:
+    msg: 'Galaxy version: {{ GALAXY_VERSION }}'
+
+- debug:
+    msg: 'Galaxy version number: {{ galaxy_version_number }}'
+  when: galaxy_version_number is defined
+
 # We set galaxy_version_number to 100.0 if master or dev branch is selected.
 # This simplify ansible logic, since we can use the galaxy_version_number to
 # trigger current muster and dev support.
