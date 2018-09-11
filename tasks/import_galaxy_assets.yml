@@ -18,7 +18,6 @@
     clone: yes
     force: yes
     dest: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
-p
   when: not tool_dir_path.stat.exists|bool
   become_user: root
   become_method: sudo
