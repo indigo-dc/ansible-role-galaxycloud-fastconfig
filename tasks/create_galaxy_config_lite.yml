@@ -15,7 +15,7 @@
     - { section: 'app:main', option: 'database_connection', value: '{{ galaxy_database_connection }}' }
     - { section: 'app:main', option: 'install_database_connection', value: '{{ galaxy_install_database_connection }}' }
     - { section: 'app:main', option: 'admin_users', value: '{{ GALAXY_ADMIN_EMAIL }}' }
-  when: galaxy_config_file_extension == 'ini'
+  when: galaxy_config_style == 'ini-paste'
 
 - name: Edit galaxy.lite.yml
   command: '{{ galaxy_venv_path }}/bin/python
@@ -28,4 +28,4 @@
     - { section: 'galaxy', option: 'database_connection', value: '{{galaxy_database_connection.stdout}}' }
     - { section: 'galaxy', option: 'install_database_connection', value: '{{galaxy_install_database_connection.stdout}}' }
     - { section: 'galaxy', option: 'admin_users', value: '{{galaxy_admin_users.stdout}}' }
-  when: galaxy_config_file_extension == 'yml'
+  when: galaxy_config_style == 'yaml'
