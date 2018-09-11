@@ -25,7 +25,7 @@
             -o "{{ item.option }}"
             -v "{{ item.value }}"'
   with_items:
-    - { section: '{{ galaxy_config_section }}', option: 'database_connection', value: '{{galaxy_database_connection.stdout}}' }
-    - { section: '{{ galaxy_config_section }}', option: 'install_database_connection', value: '{{galaxy_install_database_connection.stdout}}' }
-    - { section: '{{ galaxy_config_section }}', option: 'admin_users', value: '{{galaxy_admin_users.stdout}}' }
+    - { section: '{{ galaxy_config_section }}', option: 'database_connection', value: '{{ galaxy_database_connection }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'install_database_connection', value: '{{ galaxy_install_database_connection }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'admin_users', value: '{{ GALAXY_ADMIN_EMAIL }}' }
   when: galaxy_config_style == 'yaml'
