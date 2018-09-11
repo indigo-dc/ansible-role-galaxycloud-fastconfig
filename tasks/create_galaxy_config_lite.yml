@@ -12,9 +12,9 @@
     option: '{{ item.option }}'
     value: '{{ item.value }}'
   with_items:
-    - { section: 'app:main', option: 'database_connection', value: '{{ galaxy_database_connection }}' }
-    - { section: 'app:main', option: 'install_database_connection', value: '{{ galaxy_install_database_connection }}' }
-    - { section: 'app:main', option: 'admin_users', value: '{{ GALAXY_ADMIN_EMAIL }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'database_connection', value: '{{ galaxy_database_connection }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'install_database_connection', value: '{{ galaxy_install_database_connection }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'admin_users', value: '{{ GALAXY_ADMIN_EMAIL }}' }
   when: galaxy_config_style == 'ini-paste'
 
 - name: Edit galaxy.lite.yml
@@ -25,7 +25,7 @@
             -o "{{ item.option }}"
             -v "{{ item.value }}"'
   with_items:
-    - { section: 'galaxy', option: 'database_connection', value: '{{galaxy_database_connection.stdout}}' }
-    - { section: 'galaxy', option: 'install_database_connection', value: '{{galaxy_install_database_connection.stdout}}' }
-    - { section: 'galaxy', option: 'admin_users', value: '{{galaxy_admin_users.stdout}}' }
+    - { section: '{{ galaxy_config_section }}', option: 'database_connection', value: '{{galaxy_database_connection.stdout}}' }
+    - { section: '{{ galaxy_config_section }}', option: 'install_database_connection', value: '{{galaxy_install_database_connection.stdout}}' }
+    - { section: '{{ galaxy_config_section }}', option: 'admin_users', value: '{{galaxy_admin_users.stdout}}' }
   when: galaxy_config_style == 'yaml'

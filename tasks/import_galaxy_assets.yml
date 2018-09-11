@@ -36,17 +36,9 @@ p
     - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.lite'
     - '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
 
-- name: '[VM][release_17.**] Install workflow and libraries'
-  include: workflows_and_libraries_17.yml
-  when:
-    - galaxy_version_number|float < '18.01'
-    - install_workflows|bool or install_data_libraries|bool
-
-- name: '[VM] Install workflow and libraries'
+- name: Install workflow and libraries
   include: workflows_and_libraries.yml
-  when:
-    - galaxy_version_number|float >= '18.01'
-    - install_workflows|bool or install_data_libraries|bool
+  when: install_workflows|bool or install_data_libraries|bool
 
 # Move Galaxy files from /home/galaxy/galaxy/databaase to {{ galaxy_db_dir }}
 - include: move_galaxy_database_dir.yml
