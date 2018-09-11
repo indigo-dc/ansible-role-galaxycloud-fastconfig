@@ -50,5 +50,5 @@
             -o "{{ item.option }}"
             -v "{{ item.value }}"'
   with_items:
-    - { section: 'galaxy', option: 'static_enabled', value: 'false' }
-    - { section: 'galaxy', option: 'track_jobs_in_database', value: 'true' }
+    - { section: '{{ galaxy_config_section }}', option: 'static_enabled', value: 'false' }
+    - { section: '{{ galaxy_config_section }}', option: 'track_jobs_in_database', value: 'true' }
