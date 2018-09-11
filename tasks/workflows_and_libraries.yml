@@ -47,7 +47,7 @@
 
 - name: Copy galaxy-startup-lite template
   template:
-    src: '/tmp/galaxy-startup-lite.17.sh.j2'
+    src: '/tmp/galaxy-startup-lite.sh.j2'
     dest: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
     mode: a+x
   become_user: root
