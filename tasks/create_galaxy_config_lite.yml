@@ -1,8 +1,8 @@
 ---
 - name: Create galaxy config file for lite start
   copy:
-    src: '{{ galaxy_config_path }}/galaxy.ini.sample'
-    dest: '{{ galaxy_config_path }}/galaxy.lite.{{galaxy_config_file_extension}}'
+    src: '{{ galaxy_config_path }}/galaxy.{{ galaxy_config_file_extension }}.sample'
+    dest: '{{ galaxy_config_path }}/galaxy.lite.{{ galaxy_config_file_extension }}'
     remote_src: true
 
 - name: '[release_17.**] Edit galaxy.lite.ini'
