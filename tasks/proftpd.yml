@@ -32,7 +32,7 @@
     option: 'ftp_upload_site'
     value: '{{ ansible_default_ipv4.address }}'
   when:
-    - galaxy_config_file_extension == 'ini'
+    - galaxy_config_style == 'ini-paste'
     - ansible_virtualization_type != "docker"
 
 - name: '[Docker][release_17.**] Set ip address in galaxy.ini'
@@ -42,7 +42,7 @@
     option: ftp_upload_site
     value: "indigo-dc.galaxycloud docker by elixir-italy.org"
   when:
-    - galaxy_config_file_extension == 'ini'
+    - galaxy_config_style == 'ini-paste'
     - ansible_virtualization_type == "docker"
 
 - name: '[VM] Set ip address in galaxy.yml'
@@ -53,7 +53,7 @@
             -o ftp_upload_site
             -v "{{ ansible_default_ipv4.address }}"'
   when:
-    - galaxy_config_file_extension == 'yml'
+    - galaxy_config_style == 'yaml'
     - ansible_virtualization_type != "docker"
 
 - name: '[Docker] Set ip address in galaxy.yml'
@@ -64,5 +64,5 @@
             -o ftp_upload_site
             -v "galaxycloud docker by elixir-italy.org"'
   when:
-    - galaxy_config_file_extension == 'yml'
+    - galaxy_config_style == 'yaml'
     - ansible_virtualization_type == "docker"

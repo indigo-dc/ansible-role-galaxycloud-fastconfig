@@ -6,10 +6,10 @@
     option: '{{ item.option }}'
     value: '{{ item.value }}'
   with_items:
-    - { section: 'app:main', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
-  when: galaxy_config_file_extension == 'ini'
+    - { section: '{{ galaxy_config_section }}', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
+  when: galaxy_config_style == 'ini-paste'
 
-- name: '[release_18.**] Edit galaxy.yml for nginx'
+- name: 'Edit galaxy.yml for nginx'
   command: '{{ galaxy_venv_path }}/bin/python
             {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
             -c "{{ galaxy_config_file }}"
@@ -17,8 +17,8 @@
             -o "{{ item.option }}"
             -v "{{ item.value }}"'
   with_items:
-    - { section: 'galaxy', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
-  when: galaxy_config_file_extension == 'yml'
+    - { section: '{{ galaxy_config_section }}', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
+  when: galaxy_config_style == 'yaml'
 
 - name: Change nginx_upload_store path directory
   lineinfile:
