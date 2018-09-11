@@ -2,18 +2,8 @@
 # Galaxy customization recipe
 
 #______________________________________
-## Add uWSGI section to galaxy.ini file
-## Galaxy < release_18.01
-
-- include: galaxy_ini_custom.yml
-  when: galaxy_config_file_extension == 'ini'
-
-#______________________________________
-## Edit uWSGI section in galaxy.tyml file
-## Galaxy >= release_18.05
-
-- include: galaxy_yaml_custom.yml
-  when: galaxy_config_file_extension == 'yml'
+## Add uWSGI section to galaxy.ini or galaxy.yml file
+- include: galaxy_{{galaxy_config_style}}_custom.yml
 
 #______________________________________
 # Conda configuration.
@@ -25,18 +15,18 @@
 # IMPORTANT: start Galaxy database postgresql to setup the galaxy administrator credentials
 
 - name: Setup Galaxy administrator
-  command: "{{ galaxy_venv_path }}/bin/python {{ galaxy_custom_script_path }}/create_galaxy_user.py --user {{ GALAXY_ADMIN_EMAIL }} --password {{ GALAXY_ADMIN_PASSWORD }} --username {{ GALAXY_ADMIN_USERNAME }} -c {{ galaxy_config_file }} --key {{ GALAXY_ADMIN_API_KEY }}"
+  command: "{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/create_galaxy_user.py
+            --user {{ GALAXY_ADMIN_EMAIL }}
+            --password {{ GALAXY_ADMIN_PASSWORD }}
+            --username {{ GALAXY_ADMIN_USERNAME }}
+            -c {{ galaxy_config_file }}
+            --key {{ GALAXY_ADMIN_API_KEY }}"
   args:
     chdir: '{{ galaxy_install_path }}/'
   environment:
     PYTHONPATH: "{{ galaxy_install_path }}/lib"
     VIRTUAL_ENV: "{{ galaxy_venv_path }}"
-
-#______________________________________
-# Install workflow and libraries
-
-- include: import_galaxy_assets.yml
-  when: galaxy_flavor != 'galaxy-no-tools'
 
 #______________________________________
 # id_secret configuration
@@ -48,16 +38,22 @@
 - name: '[release_17.**] Galaxy id_secret key configuration'
   ini_file:
     dest: '{{ galaxy_config_file }}'
-    section: 'app:main'
+    section: '{{ galaxy_config_section }}'
     option: 'id_secret'
     value: '{{ galaxy_id_secret.stdout }}'
-  when: galaxy_config_file_extension == 'ini'
+  when: galaxy_config_style == 'ini-paste'
 
 - name: 'Galaxy id_secret key configuration'
   command: '{{ galaxy_venv_path }}/bin/python
             {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
             -c {{ galaxy_config_file }}
-            -s galaxy
+            -s {{ galaxy_config_section }}
             -o id_secret
             -v "{{ galaxy_id_secret.stdout }}"'
-  when: galaxy_config_file_extension == 'yml'
+  when: galaxy_config_style == 'yaml'
+
+#______________________________________
+# Install workflow and libraries
+
+- include: import_galaxy_assets.yml
+  when: galaxy_flavor != 'galaxy-no-tools'
