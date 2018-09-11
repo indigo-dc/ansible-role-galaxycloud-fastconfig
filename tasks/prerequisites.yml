@@ -58,3 +58,6 @@
   set_fact:
      galaxy_config_style: 'ini-paste'
   when: galaxy_version_number|float < '18.01'
+
+- debug:
+    msg: 'Galaxy configuration style: "{{ galaxy_config_style }}"'
