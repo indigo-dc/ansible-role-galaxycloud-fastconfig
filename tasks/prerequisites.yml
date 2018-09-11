@@ -60,7 +60,7 @@
   when: galaxy_version_number|float < 18.01
 
 - debug:
-    msg: 'Galaxy configuration style: "{{ galaxy_config_style }}"'
-
-- debug:
-    msg: 'Galaxy configuration section in {{ galaxy_config_file }}: {{ galaxy_config_section }}'
+   msg: "{{ item }}"
+  with_items:
+    - 'Galaxy configuration style: "{{ galaxy_config_style }}"'
+    - 'Galaxy configuration section in {{ galaxy_config_file }}: {{ galaxy_config_section }}'
