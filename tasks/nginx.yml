@@ -1,18 +1,31 @@
 ---
-- name: Edit galaxy.ini for nginx
+- name: '[release_17.**] Edit galaxy.ini for nginx'
   ini_file:
     dest: '{{ galaxy_config_file }}'
     section: '{{ item.section }}'
     option: '{{ item.option }}'
     value: '{{ item.value }}'
   with_items:
-    - { section: 'app:main', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
+    - { section: '{{ galaxy_config_section }}', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
+  when: galaxy_config_style == 'ini-paste'
+
+- name: 'Edit galaxy.yml for nginx'
+  command: '{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
+            -c "{{ galaxy_config_file }}"
+            -s "{{ item.section }}"
+            -o "{{ item.option }}"
+            -v "{{ item.value }}"'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'nginx_upload_store', value: "{{ nginx_upload_store_path }}" }
+  when: galaxy_config_style == 'yaml'
 
 - name: Change nginx_upload_store path directory
   lineinfile:
     dest: '/etc/nginx/nginx.conf'
     regexp: '            upload_store /home/galaxy/galaxy/database/tmp/nginx_upload_store;'
     line: '            upload_store {{galaxy_db_dir}}/tmp/nginx_upload_store;'
+    backrefs: yes
   become_user: root
   become_method: sudo
 

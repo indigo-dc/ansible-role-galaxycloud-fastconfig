@@ -1,0 +1,47 @@
+---
+#______________________________________
+# galaxy.ini configuration
+## Galaxy < release_18.01
+
+- name: '[release_17.**] Galaxy configuration'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'admin_users', value: "{{ GALAXY_ADMIN_EMAIL }}" }
+    - { section: '{{ galaxy_config_section }}', option: 'brand', value: "{{ galaxy_instance_description }}" }
+    - { section: '{{ galaxy_config_section }}', option: 'tool_dependency_dir', value: "{{ tool_deps_path }}" }
+
+- name: '[release_17.**] Galaxy user login options'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'require_login', value: '{{ require_login }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'allow_user_creation', value: '{{ allow_user_creation }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'allow_user_impersonation', value: '{{ allow_user_impersonation }}' }
+    - { section: '{{ galaxy_config_section }}', option: 'new_user_dataset_access_role_default_private', value: '{{ new_user_dataset_access_role_default_private }}' }
+  when: item.value|bool
+
+- name: '[release_17.**] Database directory configuration'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'job_working_directory', value: "{{ galaxy_db_dir }}/job_working_directory" }
+    - { section: '{{ galaxy_config_section }}', option: 'file_path', value: "{{ galaxy_db_dir }}/files" }
+    - { section: '{{ galaxy_config_section }}', option: 'new_file_path', value: "{{ galaxy_db_dir }}/tmp" }
+    - { section: '{{ galaxy_config_section }}', option: 'template_cache_path', value: "{{ galaxy_db_dir }}/compiled_templates" }
+    - { section: '{{ galaxy_config_section }}', option: 'citation_cache_data_dir', value: "{{ galaxy_db_dir }}/citations/data" }
+    - { section: '{{ galaxy_config_section }}', option: 'citation_cache_lock_dir', value: "{{ galaxy_db_dir }}/citations/lock" }
+    - { section: '{{ galaxy_config_section }}', option: 'whoosh_index_dir', value: "{{ galaxy_db_dir }}/whoosh_indexes" }
+    - { section: '{{ galaxy_config_section }}', option: 'object_store_cache_path', value: "{{ galaxy_db_dir }}/object_store_cache" }
+    - { section: '{{ galaxy_config_section }}', option: 'cluster_file_directory', value: "{{ galaxy_db_dir }}/pbs" }
+    - { section: '{{ galaxy_config_section }}', option: 'ftp_upload_dir', value: "{{ galaxy_db_dir }}/ftp" }
+  when: galaxy_db_dir != "{{ galaxy_install_path }}/database"

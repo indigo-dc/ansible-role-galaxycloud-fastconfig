@@ -8,8 +8,6 @@
   file:
     path: '{{ galaxy_tools_base_dir }}'
     state: directory
-    owner: '{{ galaxy_user }}'
-    group: '{{ galaxy_user }}'
   when: not tool_dir_path.stat.exists|bool
   become_user: root
   become_method: sudo
@@ -27,18 +25,19 @@
 - name: Include sources list
   include: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
 
-- name: Delete old backup galaxy.ini files
+- name: Delete ALL old backup galaxy.ini files
   file:
     path: '{{item}}'
     state: absent
   with_items:
-    - '{{galaxy_config_path}}/galaxy.ini.prod'
-    - '{{galaxy_config_path}}/galaxy.ini.lite'
+    - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.prod'
+    - '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
+    - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.lite'
+    - '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
 
-- name: '[VM] Install workflow and libraries'
+- name: Install workflow and libraries
   include: workflows_and_libraries.yml
-  when:
-    - install_workflows|bool or install_data_libraries|bool
+  when: install_workflows|bool or install_data_libraries|bool
 
 # Move Galaxy files from /home/galaxy/galaxy/databaase to {{ galaxy_db_dir }}
 - include: move_galaxy_database_dir.yml

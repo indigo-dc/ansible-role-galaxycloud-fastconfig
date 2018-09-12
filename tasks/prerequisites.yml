@@ -29,3 +29,38 @@
 
 - include: path.yml
   when: enable_storage_advanced_options|bool == false
+
+#______________________________________
+# Check galaxy.ini or galaxy.yml to enable support for older versions
+
+- name: Get Galaxy version number only for comparison
+  set_fact:
+    galaxy_version_number: "{{ GALAXY_VERSION | replace('release_','') }}"
+  when: (GALAXY_VERSION != 'master') or (GALAXY_VERSION != 'dev')
+
+- debug:
+    msg: 'Galaxy version: {{ GALAXY_VERSION }}'
+
+- debug:
+    msg: 'Galaxy version number: {{ galaxy_version_number }}'
+  when: galaxy_version_number is defined
+
+# We set galaxy_version_number to 100.0 if master or dev branch is selected.
+# This simplify ansible logic, since we can use the galaxy_version_number to
+# trigger current muster and dev support.
+# Currently they are using yaml code base style.
+- name: 'Set Galaxy version number to 100.0 if master or dev branch'
+  set_fact:
+    galaxy_version_number: '100.0'
+  when: (GALAXY_VERSION == 'master') or (GALAXY_VERSION == 'dev')
+
+- name: Support for older version with ini configuration file
+  set_fact:
+     galaxy_config_style: 'ini-paste'
+  when: galaxy_version_number|float < 18.01
+
+- debug:
+   msg: "{{ item }}"
+  with_items:
+    - 'Galaxy configuration style: "{{ galaxy_config_style }}"'
+    - 'Galaxy configuration section in {{ galaxy_config_file }}: {{ galaxy_config_section }}'

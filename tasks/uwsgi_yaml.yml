@@ -1,0 +1,54 @@
+---
+#______________________________________
+# Edit uwsgi section in galaxy.yml file
+# Galaxy > release_18.01
+
+- name: 'Edit uWSGI configuration in galaxy.yml'
+  command: '{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
+            -c "{{ galaxy_config_file }}"
+            -s "{{ item.section }}"
+            -o "{{ item.option }}"
+            -v "{{ item.value }}"'
+  with_items:
+    - { section: 'uwsgi', option: 'master', value: 'true' }
+    - { section: 'uwsgi', option: 'processes', value: '{{ uwsgi_processes }}' }
+    - { section: 'uwsgi', option: 'socket', value: '{{ uwsgi_socket_port }}' }
+    - { section: 'uwsgi', option: 'manage-script-name', value: true }
+    - { section: 'uwsgi', option: 'stats', value: '{{ uwsgi_stats_port }}' }
+    - { section: 'uwsgi', option: 'threads', value: '{{ uwsgi_threads }}' }
+    - { section: 'uwsgi', option: 'logto', value: '{{ uwsgi_errorlog }}' }
+    - { section: 'uwsgi', option: 'no-orphans', value: 'true' }
+    - { section: 'uwsgi', option: 'thunder-lock', value: '{{ uwsgi_thunder_lock }}' }
+
+- name: 'Set at least 2 uWSGI wn if proc<=2'
+  command: '{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
+            -c {{ galaxy_config_file }}
+            -s uwsgi
+            -o processes
+            -v 2'
+  when: ansible_processor_vcpus <= 2
+
+- name: 'Set 8 uWSGI wn if proc>8'
+  command: '{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
+            -c {{ galaxy_config_file }}
+            -s uwsgi
+            -o processes
+            -v 8'
+  when: ansible_processor_vcpus > 8
+
+#______________________________________
+# Edit galaxy.yml file
+
+- name: 'Edit galaxy.yml'
+  command: '{{ galaxy_venv_path }}/bin/python
+            {{ galaxy_custom_script_path }}/parse_galaxy_yaml.py
+            -c "{{ galaxy_config_file }}"
+            -s "{{ item.section }}"
+            -o "{{ item.option }}"
+            -v "{{ item.value }}"'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'static_enabled', value: 'false' }
+    - { section: '{{ galaxy_config_section }}', option: 'track_jobs_in_database', value: 'true' }

@@ -1,42 +1,66 @@
 ---
-- name: stop galaxy
+- name: Stop galaxy
   supervisorctl: name="galaxy:" state=stopped
   ignore_errors: yes
+  become_user: root
+  become_method: sudo
 
-- name: backup galaxy.ini
+- name: 'Backup galaxy.{{galaxy_config_file_extension}}'
   copy:
     src: '{{galaxy_config_file}}'
-    dest: '{{galaxy_config_path}}/galaxy.ini.prod'
+    dest: '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
     owner: '{{galaxy_user}}'
     group: '{{galaxy_user}}'
     remote_src: true
     force: no # prevent galaxy.ini.prod be rewritten
 
-- include: create_galaxy_ini_lite.yml 
+- include: create_galaxy_config_lite.yml 
 
-- name: Move to lite galaxy.ini file
+- name: 'Move to lite galaxy.{{galaxy_config_file_extension}} file'
   copy:
-    src: '{{galaxy_config_path}}/galaxy.ini.lite'
+    src: '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
     dest: '{{galaxy_config_file}}'
     owner: '{{galaxy_user}}'
     group: '{{galaxy_user}}'
     remote_src: true
+    
+- name: Check galaxy-startup-lite exists
+  stat:
+    path: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
+  register: stat_galaxy_startup_list_result
+
+- name: '[release_17.**] Download galaxy-startup-lite template'
+  get_url:
+    url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.17.sh.j2'
+    dest: '/tmp/galaxy-startup-lite.sh.j2'
+  when:
+    - not stat_galaxy_startup_list_result.stat.exists|bool
+    - galaxy_version_number < '18.01'
 
 - name: Download galaxy-startup-lite template
   get_url:
-    url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.17.sh.j2'
-    dest: '/tmp/galaxy-startup-lite.17.sh.j2'
+    url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.sh.j2'
+    dest: '/tmp/galaxy-startup-lite.sh.j2'
+  when:
+    - not stat_galaxy_startup_list_result.stat.exists|bool
+    - galaxy_version_number >= '18.01'
 
 - name: Copy galaxy-startup-lite template
   template:
-    src: '/tmp/galaxy-startup-lite.17.sh.j2'
+    src: '/tmp/galaxy-startup-lite.sh.j2'
     dest: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
     mode: a+x
   become_user: root
   become_method: sudo
+  when: not stat_galaxy_startup_list_result.stat.exists|bool
 
 - name: Start Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite start'
+
+- name: '[release_17.**] Set ephemeris to the right version'
+  set_fact:
+    ephemeris_version = '0.7.0'
+  when: galaxy_version_number < '18.01'
 
 - name: Create/invoke script virtualenv
   pip:
@@ -54,19 +78,21 @@
   when:
     - install_workflows|bool
 
-- include: install_data_library_list.yml
-  with_items: '{{ galaxy_tools_data_library_list_files }}'
-  loop_control:
-    loop_var: data_library_list_file
-  when:
-    - install_data_libraries|bool
+# Data libraries upload is Currently not working
+# TODO fix.
+#- include: install_data_library_list.yml
+#  with_items: '{{ galaxy_tools_data_library_list_files }}'
+#  loop_control:
+#    loop_var: data_library_list_file
+#  when:
+#    - install_data_libraries|bool
 
 - name: Stop Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite stop'
 
-- name: restore galaxy.ini
+- name: 'Restore galaxy.{{galaxy_config_file_extension}}' 
   copy:
-    src: '{{galaxy_config_path}}/galaxy.ini.prod'
+    src: '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
     dest: '{{galaxy_config_file}}'
     owner: '{{galaxy_user}}'
     group: '{{galaxy_user}}'

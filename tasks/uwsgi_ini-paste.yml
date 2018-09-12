@@ -1,0 +1,48 @@
+---
+# uWSGI installation and configuration recipe
+
+- name: '[release_17.**] uWSGI section config'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: 'uwsgi', option: 'master', value: 'True' }
+    - { section: 'uwsgi', option: 'processes', value: '{{ uwsgi_processes }}' }
+    - { section: 'uwsgi', option: 'socket', value: '{{ uwsgi_socket_port }}' }
+    - { section: 'uwsgi', option: 'stats', value: '{{ uwsgi_stats_port }}' }
+    - { section: 'uwsgi', option: 'pythonpath', value: '{{ galaxy_install_path }}/lib' }
+    - { section: 'uwsgi', option: 'pythonhome', value: '{{ galaxy_venv_path }}' }
+    - { section: 'uwsgi', option: 'threads', value: '{{ uwsgi_threads }}' }
+    - { section: 'uwsgi', option: 'logto', value: '{{ uwsgi_errorlog }}' }
+    - { section: 'uwsgi', option: 'no-orphans', value: 'True' }
+
+- name: '[release_17.**] if proc<=2'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: 'uwsgi'
+    option: 'processes'
+    value: '{{ ansible_processor_vcpus }}'
+  when: ansible_processor_vcpus <= 2
+
+- name: '[release_17.**] if proc>8'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: 'uwsgi'
+    option: 'processes'
+    value: '8'
+  when: ansible_processor_vcpus > 8
+
+#______________________________________
+# Edit galaxy.ini file
+
+- name: '[release_17.**] Edit galaxy.ini'
+  ini_file:
+    dest: '{{ galaxy_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: ' {{item.value }}'
+  with_items:
+    - { section: '{{ galaxy_config_section }}', option: 'static_enabled', value: 'False' }
+    - { section: '{{ galaxy_config_section }}', option: 'track_jobs_in_database', value: 'True' }
