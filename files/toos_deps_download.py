@@ -22,6 +22,8 @@ def parse_cli_options():
   parser = argparse.ArgumentParser(description='Download Galaxy tool dependency from Swift repository', formatter_class=argparse.RawTextHelpFormatter)
   parser.add_argument( '-u', '--url',  dest='pseudo_folder_url', default=None , help='Swift pseudo folder url')
   parser.add_argument( '-i', '--input',  dest='galaxy_flavor', default=None,  help='Input flavor')
+  parser.add_argument( '-r', '--release',  dest='galaxy_version', default=None,  help='Galaxy version')
+  parser.add_argument( '-t', '--tag',  dest='flavor_tag', default=None,  help='Tag for different version of the same flavor')
   parser.add_argument( '-o', '--outdir', dest='outdir', default='/export', help='Output directory')
   return parser.parse_args()
 
@@ -42,7 +44,7 @@ def write_data(name, url):
   try: 
     response = urllib2.urlopen(url)
     with open(name, "wb") as fp:
-      #print url
+      print url
       curl = pycurl.Curl()
       curl.setopt(pycurl.URL, url)
       curl.setopt(pycurl.WRITEDATA, fp)
@@ -54,8 +56,8 @@ def write_data(name, url):
 
 #______________________________________
 # Extract tar.gz archive
-def extract_tar_gz(tarfile):
-  tar = tarfile.open(tarfile)
+def extract_tar_gz(tar_file):
+  tar = tarfile.open(tar_file)
   tar.extractall()
   tar.close()
 
@@ -68,7 +70,13 @@ def download():
   logging.debug('>>> Galaxy tool dependency download log file.')
 
   if options.galaxy_flavor is None:
-    raise Exception('No galaxy flavor specified')
+    raise Exception('No galaxy flavor detected.')
+
+  if options.galaxy_version is None:
+    raise Exception('No galaxy version detected.')
+
+  if options.flavor_tag is None:
+    raise Exception('No galaxy flavor tag detected.')
 
   create_dir(options.outdir)
   os.chdir(options.outdir)
@@ -78,7 +86,7 @@ def download():
     pseudo_folder_url = 'http://cloud.recas.ba.infn.it:8080/v1/AUTH_3b4918e0a982493e8c3ebcc43586a2a8/Laniakea-galaxy-tools-tar'
 
   # download tar.gz
-  url = pseudo_folder_url + '/' + options.galaxy_flavor + '.tar.gz'
+  url = pseudo_folder_url + '/' + options.galaxy_flavor + '-' + options.galaxy_version + '-' + options.flavor_tag + '.tar.gz'
   fout=options.galaxy_flavor + '.tar.gz'
   write_data(fout, url)
 
