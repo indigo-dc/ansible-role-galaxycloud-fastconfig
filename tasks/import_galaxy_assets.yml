@@ -39,6 +39,13 @@
             -t {{ galaxy_flavor_image_tag }}
             -o {{ export_dir }}"
 
+- name: 'Delete tool dependency {{ galaxy_flavor }}.tar.gz'
+  file:
+    path: '{{ export_dir }}/{{ galaxy_flavor }}.tar.gz'
+    state: absent
+  become_user: root
+  become_method: sudo
+
 #______________________________________
 # Once tools installed, install workflow and libraries
 
