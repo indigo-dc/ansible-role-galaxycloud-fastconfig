@@ -32,15 +32,12 @@
   include_vars: '{{ galaxy_flavor }}.yml'
 
 - name: Download and extract tool dependencies
-  command: "{{ galaxy_venv_path }}/bin/python 
+  command: "/usr/bin/python 
             /tmp/tool_deps_download.py
             -i {{ galaxy_flavor }}
             -r {{ GALAXY_VERSION }}
             -t {{ galaxy_flavor_image_tag }}
             -o {{ export_dir }}"
-  environment:
-    PYTHONPATH: "{{ galaxy_install_path }}/lib"
-    VIRTUAL_ENV: "{{ galaxy_venv_path }}"
 
 #______________________________________
 # Once tools installed, install workflow and libraries
