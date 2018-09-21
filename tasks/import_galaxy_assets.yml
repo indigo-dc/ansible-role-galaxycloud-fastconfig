@@ -25,16 +25,15 @@
 
 - name: Copy download script
   copy:
-    src: 'toos_deps_download.py'
-    dest: '/tmp/toos_deps_download.py'
-  when: ansible_os_family == "Debian"
+    src: 'tool_deps_download.py'
+    dest: '/tmp/tool_deps_download.py'
 
 - name: Include flavor tag var
   include_vars: '{{ galaxy_flavor }}.yml'
 
 - name: Download and extract tool dependencies
   command: "{{ galaxy_venv_path }}/bin/python 
-            /tmp/toos_deps_download.py
+            /tmp/tool_deps_download.py
             -i {{ galaxy_flavor }}
             -r {{ GALAXY_VERSION }}
             -t {{ galaxy_flavor_image_tag }}
