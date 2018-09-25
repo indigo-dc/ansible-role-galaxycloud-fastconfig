@@ -86,7 +86,7 @@ def download():
     pseudo_folder_url = 'http://cloud.recas.ba.infn.it:8080/v1/AUTH_3b4918e0a982493e8c3ebcc43586a2a8/Laniakea-galaxy-tools-tar'
 
   # download tar.gz
-  ligging.debug('Download tar.gz')
+  logging.debug('Download tar.gz')
   url = pseudo_folder_url + '/' + options.galaxy_flavor + '-' + options.galaxy_version + '-' + options.flavor_tag + '.tar.gz'
   fout=options.galaxy_flavor + '.tar.gz'
   write_data(fout, url)
