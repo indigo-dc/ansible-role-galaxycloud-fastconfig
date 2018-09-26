@@ -33,7 +33,7 @@
 
 - debug:
     msg: '{{ item }}'
-  with_itams:
+  with_items:
     - '{{ galaxy_flavor }}'
     - '{{ GALAXY_VERSION }}'
     - '{{ galaxy_flavor_image_tag[GALAXY_VERSION] }}'
