@@ -35,7 +35,7 @@
     msg: '{{ galaxy_flavor }}'
     msg: '{{ GALAXY_VERSION }}'
     msg: '{{ galaxy_flavor_image_tag[GALAXY_VERSION] }}'
-    mgs: '{{ export_dir }}'
+    mss: '{{ export_dir }}'
 
 - name: Download and extract tool dependencies
   command: "/usr/bin/python 
