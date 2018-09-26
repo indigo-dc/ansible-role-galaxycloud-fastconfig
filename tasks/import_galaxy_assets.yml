@@ -29,14 +29,14 @@
     dest: '/tmp/tool_deps_download.py'
 
 - name: Include flavor tag var
-  include_vars: "{{ galaxy_flavor_image_tag[GALAXY_VERSION] }}.yml"
+  include_vars: "{{ galaxy_flavor }}.yml"
 
 - name: Download and extract tool dependencies
   command: "/usr/bin/python 
             /tmp/tool_deps_download.py
             -i {{ galaxy_flavor }}
             -r {{ GALAXY_VERSION }}
-            -t {{ galaxy_flavor_image_tag }}
+            -t {{ galaxy_flavor_image_tag[GALAXY_VERSION] }}
             -o {{ export_dir }}"
 
 - name: 'Delete tool dependency {{ galaxy_flavor }}.tar.gz'
