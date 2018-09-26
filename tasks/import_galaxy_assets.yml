@@ -31,6 +31,12 @@
 - name: Include flavor tag var
   include_vars: "{{ galaxy_flavor }}.yml"
 
+- debug:
+    msg: '{{ galaxy_flavor }}'
+    msg: '{{ GALAXY_VERSION }}'
+    msg: '{{ galaxy_flavor_image_tag[GALAXY_VERSION] }}'
+    mgs: '{{ export_dir }}'
+
 - name: Download and extract tool dependencies
   command: "/usr/bin/python 
             /tmp/tool_deps_download.py

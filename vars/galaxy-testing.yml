@@ -1,4 +1,4 @@
 ---
 galaxy_flavor_image_tag:
-  release_17.05: 3
-  release_18.05: 7
+  release_17.05: 7
+  release_18.05: 3
