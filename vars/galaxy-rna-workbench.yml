@@ -1,2 +1,4 @@
 ---
-galaxy_flavor_image_tag: 3
+galaxy_flavor_image_tag:
+  release_17.05: 3
+  release_18.05: 7
