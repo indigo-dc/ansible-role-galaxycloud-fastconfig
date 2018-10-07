@@ -5,6 +5,11 @@
 # Install Galaxy dependencies
 - include: prerequisites.yml
 
+# Update Galaxy for security patch
+- include: galaxy-update.yml
+  become_user: '{{ galaxy_user }}'
+  become: true
+
 # Configure Postgresql
 - include: postgresql.yml
   become_user: '{{ galaxy_user }}'

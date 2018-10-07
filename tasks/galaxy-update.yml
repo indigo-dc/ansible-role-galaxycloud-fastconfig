@@ -1,0 +1,13 @@
+---
+# Update Galaxy for security patch
+
+- include_vars: galaxy-update.yml
+
+- name: Update Galaxy
+  git:
+    repo: 'https://github.com/galaxyproject/galaxy.git'
+    dest: '{{ galaxy_install_path }}'
+    version: '{{ GALAXY_VERSION }}'
+    clone: no
+    update: yes
+  when: update_galaxy[GALAXY_VERSION] == true
