@@ -4,10 +4,7 @@
 - include_vars: galaxy-update.yml
 
 - name: Update Galaxy
-  git:
-    repo: 'https://github.com/galaxyproject/galaxy.git'
-    dest: '{{ galaxy_install_path }}'
-    version: '{{ GALAXY_VERSION }}'
-    clone: no
-    update: yes
+  command: 'git pull'
+  args:
+    chdir: '{{ galaxy_install_path }}'
   when: update_galaxy[GALAXY_VERSION] == true
