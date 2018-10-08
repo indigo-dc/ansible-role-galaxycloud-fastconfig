@@ -1,0 +1,10 @@
+---
+# Update Galaxy for security patch
+
+- include_vars: galaxy-update.yml
+
+- name: Update Galaxy
+  command: 'git pull'
+  args:
+    chdir: '{{ galaxy_install_path }}'
+  when: update_galaxy[GALAXY_VERSION] == true

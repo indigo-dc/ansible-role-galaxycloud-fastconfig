@@ -1,0 +1,4 @@
+---
+update_galaxy:
+  release_17.05: true
+  release_18.05: true
