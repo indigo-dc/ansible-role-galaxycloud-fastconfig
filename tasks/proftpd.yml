@@ -12,8 +12,11 @@
 - name: 'Edit proftpd.conf: change default address'
   lineinfile:
     name: '{{ proftpd_conf_path }}'
-    regexp: 'DefaultAddress'
-    line: 'DefaultAddress                  {{ ansible_default_ipv4.address }}'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - { regexp: '{{ proftpd_conf_path }}', line: 'DefaultAddress                  {{ ansible_default_ipv4.address }}' }
+    - { regexp: 'PassivePorts', line: 'PassivePorts                    {{ proftpd_passive_port_low }} {{ proftpd_passive_port_high }}' }
   become_user: root
   become_method: sudo
 
@@ -22,14 +25,6 @@
     name: '{{ proftpd_conf_path }}'
     regexp: '/home/galaxy/galaxy/database/ftp/'
     replace: '{{ export_dir }}/galaxy/database/ftp/'
-  become_user: root
-  become_method: sudo
-
-- name: 'Edit proftpd.conf: passive port range'
-  lineinfile:
-    name: '{{ proftpd_conf_path }}'
-    regexp: 'PassivePorts'
-    replace: 'PassivePorts                    {{ proftpd_passive_port_low }} {{ proftpd_passive_port_high }}'
   become_user: root
   become_method: sudo
 
