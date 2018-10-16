@@ -14,6 +14,22 @@
 #    path: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
 #  register: stat_galaxy_startup_list_result
 
+- name: Download read_galaxy_config_file recipe
+  get_url:
+    url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/tasks/read_galaxy_config_file.yml'
+    dest: '/tmp/galaxy-startup-lite.sh.j2'
+#  when: not stat_galaxy_startup_list_result.stat.exists|bool
+
+- name: Download galaxy configuration file reader
+  get_url:
+    url: 'https://raw.githubusercontent.com/Laniakea-elixir-it/Scripts/master/galaxy/read_galaxy_config_file.py'
+    dest: '/tmp/read_galaxy_config_file.py'
+    mode: a+x
+#  when: not stat_galaxy_startup_list_result.stat.exists|bool
+
+- include: read_galaxy_config_file.yml
+#    - not stat_galaxy_startup_list_result.stat.exists|bool
+
 - name: '[release_17.**] Download galaxy-startup-lite template'
   get_url:
     url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.17.sh.j2'
@@ -73,4 +89,4 @@
 #    - install_data_libraries|bool
 
 - name: Stop Galaxy lite
-  command: '{{galaxy_custom_script_path}}/galaxy-startup-lite stop'
+  command: '{{ galaxy_custom_script_path }}/galaxy-startup-lite stop'
