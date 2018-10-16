@@ -5,45 +5,30 @@
   become_user: root
   become_method: sudo
 
-- name: 'Backup galaxy.{{galaxy_config_file_extension}}'
-  copy:
-    src: '{{galaxy_config_file}}'
-    dest: '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
-    owner: '{{galaxy_user}}'
-    group: '{{galaxy_user}}'
-    remote_src: true
-    force: no # prevent galaxy.ini.prod be rewritten
+# Currently images has old version of the startup-lite script
+# without embedded environment variables
+# current verions simplify the role logic, so we update the script version to 0.2
 
-- include: create_galaxy_config_lite.yml 
-
-- name: 'Move to lite galaxy.{{galaxy_config_file_extension}} file'
-  copy:
-    src: '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
-    dest: '{{galaxy_config_file}}'
-    owner: '{{galaxy_user}}'
-    group: '{{galaxy_user}}'
-    remote_src: true
-    
-- name: Check galaxy-startup-lite exists
-  stat:
-    path: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
-  register: stat_galaxy_startup_list_result
+#- name: Check galaxy-startup-lite exists
+#  stat:
+#    path: '{{galaxy_custom_script_path}}/galaxy-startup-lite'
+#  register: stat_galaxy_startup_list_result
 
 - name: '[release_17.**] Download galaxy-startup-lite template'
   get_url:
     url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.17.sh.j2'
     dest: '/tmp/galaxy-startup-lite.sh.j2'
   when:
-    - not stat_galaxy_startup_list_result.stat.exists|bool
-    - galaxy_version_number < '18.01'
+#    - not stat_galaxy_startup_list_result.stat.exists|bool
+    - galaxy_version_number|float < 18.00
 
 - name: Download galaxy-startup-lite template
   get_url:
     url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/templates/galaxy-startup-lite.sh.j2'
     dest: '/tmp/galaxy-startup-lite.sh.j2'
   when:
-    - not stat_galaxy_startup_list_result.stat.exists|bool
-    - galaxy_version_number >= '18.01'
+#    - not stat_galaxy_startup_list_result.stat.exists|bool
+    - galaxy_version_number|float >= 18.00
 
 - name: Copy galaxy-startup-lite template
   template:
@@ -52,7 +37,7 @@
     mode: a+x
   become_user: root
   become_method: sudo
-  when: not stat_galaxy_startup_list_result.stat.exists|bool
+#  when: not stat_galaxy_startup_list_result.stat.exists|bool
 
 - name: Start Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite start'
@@ -60,7 +45,7 @@
 - name: '[release_17.**] Set ephemeris to the right version'
   set_fact:
     ephemeris_version = '0.7.0'
-  when: galaxy_version_number < '18.01'
+  when: galaxy_version_number|float < 18.01
 
 - name: Create/invoke script virtualenv
   pip:
@@ -89,11 +74,3 @@
 
 - name: Stop Galaxy lite
   command: '{{galaxy_custom_script_path}}/galaxy-startup-lite stop'
-
-- name: 'Restore galaxy.{{galaxy_config_file_extension}}' 
-  copy:
-    src: '{{galaxy_config_path}}/galaxy.prod.{{galaxy_config_file_extension}}'
-    dest: '{{galaxy_config_file}}'
-    owner: '{{galaxy_user}}'
-    group: '{{galaxy_user}}'
-    remote_src: true
