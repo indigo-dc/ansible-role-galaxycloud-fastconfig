@@ -27,7 +27,7 @@
     mode: a+x
 #  when: not stat_galaxy_startup_list_result.stat.exists|bool
 
-- include: read_galaxy_config_file.yml
+- include: /tmp/read_galaxy_config_file.yml
 #    - not stat_galaxy_startup_list_result.stat.exists|bool
 
 - name: '[release_17.**] Download galaxy-startup-lite template'
