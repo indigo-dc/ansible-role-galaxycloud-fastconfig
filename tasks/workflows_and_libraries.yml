@@ -17,7 +17,7 @@
 - name: Download read_galaxy_config_file recipe
   get_url:
     url: 'https://raw.githubusercontent.com/indigo-dc/ansible-role-galaxycloud-tools/master/tasks/read_galaxy_config_file.yml'
-    dest: '/tmp/galaxy-startup-lite.sh.j2'
+    dest: '/tmp/read_galaxy_config_file.yml'
 #  when: not stat_galaxy_startup_list_result.stat.exists|bool
 
 - name: Download galaxy configuration file reader
