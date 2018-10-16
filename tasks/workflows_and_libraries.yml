@@ -1,6 +1,8 @@
 ---
 - name: Stop galaxy
-  supervisorctl: name="galaxy:" state=stopped
+  supervisorctl:
+    name: 'galaxy:'
+    state: stopped
   ignore_errors: yes
   become_user: root
   become_method: sudo
