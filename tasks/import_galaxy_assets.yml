@@ -46,6 +46,8 @@
             -r {{ GALAXY_VERSION }}
             -t {{ galaxy_flavor_image_tag[GALAXY_VERSION] }}
             -o {{ export_dir }}"
+  become_user: root
+  become_method: sudo
 
 - name: 'Delete tool dependency {{ galaxy_flavor }}.tar.gz'
   file:
