@@ -95,6 +95,6 @@
     - '{{galaxy_config_path}}/galaxy.{{galaxy_config_file_extension}}.lite'
     - '{{galaxy_config_path}}/galaxy.lite.{{galaxy_config_file_extension}}'
 
-- name: Install workflow and libraries
-  include: workflows_and_libraries.yml
-  when: install_workflows|bool or install_data_libraries|bool
+#- name: Install workflow and libraries
+#  include: workflows_and_libraries.yml
+#  when: install_workflows|bool or install_data_libraries|bool
