@@ -99,7 +99,7 @@
     msg: "{{ item }}"
   with_items:
    - 'workflow: {{ install_workflows }}'
-   - 'data: {{ install_data_librarie }}'
+   - 'data: {{ install_data_libraries }}'
 
 - name: Install workflow and libraries
   include: workflows_and_libraries.yml
