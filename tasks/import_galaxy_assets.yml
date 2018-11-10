@@ -74,16 +74,17 @@
 
 - name: Get Galaxy flavor recipes
   git:
-    repo: 'https://github.com/indigo-dc/Galaxy-flavors-recipes.git'
+    repo: '{{ galaxy_flavors_recipes_url }}'
+    dest: '{{ galaxy_flavors_recipes_dir }}'
+    version: '{{ galaxy_flavors_recipes_tag }}'
     clone: yes
     force: yes
-    dest: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
-  when: not tool_dir_path.stat.exists|bool
+  #when: not tool_dir_path.stat.exists|bool
   become_user: root
   become_method: sudo
 
 - name: Include sources list
-  include: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
+  include: '{{ galaxy_flavors_recipes_dir }}/{{galaxy_flavor}}/{{galaxy_flavor}}-sources-list.yml'
 
 - name: Delete ALL old backup galaxy.ini files
   file:
