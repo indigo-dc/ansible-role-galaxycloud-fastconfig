@@ -159,4 +159,4 @@ install_data_libraries: false
 # Git repository configuration for Galaxy-flavors-recipes
 galaxy_flavors_recipes_url: 'https://github.com/indigo-dc/Galaxy-flavors-recipes.git'
 galaxy_flavors_recipes_dir: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
-galaxy_flavors_recipes_tag: 'rc1'
+galaxy_flavors_recipes_tag: 'rc2'
