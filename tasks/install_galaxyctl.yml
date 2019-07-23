@@ -13,6 +13,7 @@
 - name: 'Update/Clone Galaxy Central Management Tool (galaxyctl) repository'
   git:
     repo: 'https://github.com/Laniakea-elixir-it/galaxyctl.git'
+    version: devel
     clone: yes
     update: yes
     dest: '{{ galaxyctl_path }}'
