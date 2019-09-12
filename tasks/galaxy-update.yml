@@ -7,4 +7,6 @@
   command: 'git pull'
   args:
     chdir: '{{ galaxy_install_path }}'
-  when: update_galaxy[GALAXY_VERSION] == true
+  when: 
+    - update_galaxy[GALAXY_VERSION].exists
+    - update_galaxy[GALAXY_VERSION] == true
