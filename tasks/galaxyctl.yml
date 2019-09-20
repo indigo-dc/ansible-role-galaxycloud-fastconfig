@@ -13,6 +13,7 @@
 - name: 'Update/Clone Galaxy Central Management Tool (galaxyctl) repository'
   git:
     repo: 'https://github.com/Laniakea-elixir-it/galaxyctl.git'
+    version: HEAD
     clone: yes
     update: yes
     dest: '{{ galaxyctl_path }}'
@@ -39,3 +40,24 @@
 #    - { section: 'galaxy', option: 'galaxyctl_log_file', value: '{{ galaxy_log_path }}/galaxyctl.log' }
 #  become_user: root
 #  become_method: sudo
+
+- name: Create api virtual environment
+  pip:
+    requirements: '{{ galaxyctl_path }}/api/requirements.txt'
+    virtualenv: '{{ galaxyctl_path }}/api/venv'
+
+- name: Copy systemd unit file
+  copy:
+    src: '{{ galaxyctl_path }}/api/gunicorn/galaxyctl-api.service'
+    dest: '/etc/systemd/system/galaxyctl-api.service'
+    remote_src: yes
+  become_user: root
+  become_method: sudo
+
+- name: Start and enable ggalaxyyctl_api
+  service:
+    name: galaxyctl-api
+    state: started
+    enabled: yes
+  become_user: root
+  become_method: sudo

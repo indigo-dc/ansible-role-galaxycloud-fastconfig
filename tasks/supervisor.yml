@@ -6,11 +6,13 @@
 - name: '[EL] Set supervisord conf path'
   set_fact:
     supervisord_conf_path: '/etc'
+    galaxy_supervisord_config_file: '/etc/supervisord.d/galaxy_web.ini'
   when: ansible_os_family == "RedHat"
 
 - name: '[Ubuntu] Set supervisord conf path'
   set_fact:
     supervisord_conf_path: '/etc/supervisor'
+    galaxy_supervisord_config_file: '/etc/supervisor/conf.d/galaxy_web.conf'
   when: ansible_os_family == "Debian"
 
 #______________________________________
@@ -35,3 +37,18 @@
   become_user: root
   become_method: sudo
   when: ansible_os_family == "RedHat"
+
+#______________________________________
+# Configure for slurm support
+- name: 'Edit supervisorc.conf'
+  ini_file:
+    dest: '{{ galaxy_supervisord_config_file }}'
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  with_items:
+    - { section: 'program:galaxy_web', option: 'environment', value: 'PATH="{{ galaxy_venv_path }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",DRMAA_LIBRARY_PATH="/usr/local/lib/libdrmaa.so"' }
+    - { section: 'program:handler', option: 'environment', value: 'DRMAA_LIBRARY_PATH="/usr/local/lib/libdrmaa.so"' }
+  when: galaxy_lrms == "slurm"
+  become_user: root
+  become_method: sudo

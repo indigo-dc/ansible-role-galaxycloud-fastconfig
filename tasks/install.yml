@@ -10,6 +10,11 @@
   become_user: '{{ galaxy_user }}'
   become: true
 
+# Configure SLURM LRMS
+- include: slurm.yml
+  when: galaxy_lrms == "slurm"
+  become: true
+
 # Configure Postgresql
 - include: postgresql.yml
   become_user: '{{ galaxy_user }}'

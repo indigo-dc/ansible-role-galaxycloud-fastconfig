@@ -2,3 +2,5 @@
 update_galaxy:
   release_17.05: true
   release_18.05: true
+  release_19.01: true
+  release_19.05: true
