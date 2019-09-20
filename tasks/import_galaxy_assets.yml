@@ -76,7 +76,7 @@
   git:
     repo: '{{ galaxy_flavors_recipes_url }}'
     dest: '{{ galaxy_flavors_recipes_dir }}'
-    version: '{{ galaxy_flavors_recipes_tag }}'
+    version: '{{ GALAXY_VERSION }}'
     clone: yes
     force: yes
   #when: not tool_dir_path.stat.exists|bool
