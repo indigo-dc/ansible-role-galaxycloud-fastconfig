@@ -42,6 +42,7 @@
 - name: Download and extract tool dependencies
   command: "/usr/bin/python 
             /tmp/tool_deps_download.py
+            -u {{ remote_tool_deps_dir_url }}
             -i {{ galaxy_flavor }}
             -r {{ GALAXY_VERSION }}
             -t {{ galaxy_flavor_image_tag[GALAXY_VERSION] }}

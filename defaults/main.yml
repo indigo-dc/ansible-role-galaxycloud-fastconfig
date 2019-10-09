@@ -159,3 +159,5 @@ install_data_libraries: false
 # Git repository configuration for Galaxy-flavors-recipes
 galaxy_flavors_recipes_url: 'https://github.com/indigo-dc/Galaxy-flavors-recipes.git'
 galaxy_flavors_recipes_dir: '{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes'
+# tools tar.gz location
+remote_tool_deps_dir_url: 'http://cloud.recas.ba.infn.it:8080/v1/AUTH_3b4918e0a982493e8c3ebcc43586a2a8/Laniakea-galaxy-tools-tar'
