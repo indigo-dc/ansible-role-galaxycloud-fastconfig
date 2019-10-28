@@ -1,8 +1,9 @@
 indigo-dc.galaxycloud-fastconfig
 ================================
 
-Ansible role for Galaxy fast configuration on Virtual Machines with Galaxy and tools already inside, created using indigo.dc-galaxycloud role. The role exploits the very same input of [indigo-dc.galaxycloud ansible role](https://github.com/indigo-dc/ansible-role-galaxycloud).
+Ansible role for Galaxy fast configuration on Virtual Machines with Galaxy and tools already inside, created using indigo.dc-galaxycloud role. 
 
+The documentation on Galaxy Express services, which explotis this role, is [here](https://laniakea.readthedocs.io/en/latest/admin_documentation/indigo_paas_deploy/galaxy_vm.html).
 
 Requirements
 ------------
@@ -10,9 +11,30 @@ This ansible role supports CentOS 7 and Ubuntu 16.04 Xenial
 
 Minimum ansible version: 2.1.2.0
 
+Role Variables
+--------------
 
+The role exploits the very same variables of [indigo-dc.galaxycloud ansible role](https://github.com/indigo-dc/ansible-role-galaxycloud).
 
-Current indigo-dc.galaxycloud (and then Galaxy)  configuration is the following:
+### New variables ###
+
+``galaxy_tools_base_dir``: Galaxy flavor recipe directory. If this dir is not on the VM, the role will download the recipes (default ``/data``).
+
+``tools_venv_dir``: Ephemeris install path (defaut: ``/tmp/tools_venv``).
+
+``ephemeris_version``: Ephemeris version (defaults: ``0.7.0``).
+
+``install_workflows``: install workflows (default: ``false``).
+
+``install_data_libraries``: install libraries (default: ``false``).
+
+``galaxy_flavors_recipes_url``: Git repository configuration for Galaxy-flavors-recipes (default: ``https://github.com/indigo-dc/Galaxy-flavors-recipes.git``).
+
+``galaxy_flavors_recipes_dir``: Recipes directory on VM (default: ``{{ galaxy_tools_base_dir }}/Galaxy-flavors-recipes``).
+
+``emote_tool_deps_dir_url``: tools tar.gz location (default: ``http://cloud.recas.ba.infn.it:8080/v1/AUTH_3b4918e0a982493e8c3ebcc43586a2a8/Laniakea-galaxy-tools-tar``).
+
+Current indigo-dc.galaxycloud configuration to create valid images is:
 ```yaml
      - hosts: servers
        roles:
@@ -29,7 +51,6 @@ Current indigo-dc.galaxycloud (and then Galaxy)  configuration is the following:
 ```
 
 Final Galaxy configuration, i.e. galaxycloud + galaxycloud-fastconfig is the same of galaxycloud standalone.
-
 
 Example Playbook
 ----------------
