@@ -16,7 +16,7 @@ Role Variables
 
 The role exploits the very same variables of [indigo-dc.galaxycloud ansible role](https://github.com/indigo-dc/ansible-role-galaxycloud).
 
-### New variables ###
+###New variables###
 
 ``galaxy_tools_base_dir``: Galaxy flavor recipe directory. If this dir is not on the VM, the role will download the recipes (default ``/data``).
 
