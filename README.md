@@ -1,6 +1,16 @@
 indigo-dc.galaxycloud-fastconfig
 ================================
-Ansible role for Galaxy fast configuration on Virtual Manchines with Galaxy already installed using indigo.dc-galaxycloud role.
+
+Ansible role for Galaxy fast configuration on Virtual Machines with Galaxy and tools already inside, created using indigo.dc-galaxycloud role. The role exploits the very same input of [indigo-dc.galaxycloud ansible role](https://github.com/indigo-dc/ansible-role-galaxycloud).
+
+
+Requirements
+------------
+This ansible role supports CentOS 7 and Ubuntu 16.04 Xenial
+
+Minimum ansible version: 2.1.2.0
+
+
 
 Current indigo-dc.galaxycloud (and then Galaxy)  configuration is the following:
 ```yaml
